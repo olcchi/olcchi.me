@@ -98,7 +98,7 @@ const LetterGlitch = ({
     const initializeLetters = useCallback((columns: number, rows: number) => {
         grid.current = { columns, rows };
         const totalLetters = columns * rows;
-        
+
         // Create a single array instead of recalculating for each element
         letters.current = Array.from({ length: totalLetters }, () => ({
             char: getRandomChar(),
@@ -146,7 +146,7 @@ const LetterGlitch = ({
 
         // Only redraw when truly needed
         if (!needsRedraw.current) return;
-        
+
         letters.current.forEach((letter, index) => {
             if (!letter.active) return;
             const x = (index % grid.current.columns) * charWidth;
@@ -154,7 +154,7 @@ const LetterGlitch = ({
             ctx.fillStyle = letter.color;
             ctx.fillText(letter.char, x, y);
         });
-        
+
         needsRedraw.current = false;
     }, []);
 
@@ -177,11 +177,10 @@ const LetterGlitch = ({
 
         let allActive = true;
         let hasChanges = false;
-        
-        // 批量计算位置，减少每次循环中的计算量
+
         letters.current.forEach((letter, index) => {
-            if (letter.active) return; // 已激活的直接跳过
-            
+            if (letter.active) return; // skip active letters
+
             const x = (index % grid.current.columns) * charWidth + charWidth / 2;
             const y = Math.floor(index / grid.current.columns) * charHeight + charHeight / 2;
             const distance = Math.sqrt((x - centerX) * (x - centerX) + (y - centerY) * (y - centerY));
@@ -221,9 +220,9 @@ const LetterGlitch = ({
         let hasChanges = false;
 
         // Use pre-generated random indices array to avoid multiple Math.random calls
-        const randomIndices = Array.from({ length: updateCount }, 
+        const randomIndices = Array.from({ length: updateCount },
             () => Math.floor(Math.random() * activeLettersCount));
-        
+
         const activeLetters = letters.current.filter(l => l.active);
         randomIndices.forEach(randomIndex => {
             if (randomIndex < activeLetters.length) {
@@ -248,7 +247,7 @@ const LetterGlitch = ({
 
     const handleSmoothTransitions = useCallback(() => {
         let hasChanges = false;
-        
+
         // Batch process color changes
         letters.current.forEach((letter) => {
             if (letter.colorProgress < 1) {
@@ -276,15 +275,15 @@ const LetterGlitch = ({
     const animate = useCallback(() => {
         const now = Date.now();
         const elapsed = now - lastFrameTime.current;
-        
+
         // Implement frame rate control to reduce unnecessary rendering
         if (elapsed < frameInterval.current) {
             animationRef.current = requestAnimationFrame(animate);
             return;
         }
-        
+
         lastFrameTime.current = now;
-        
+
         if (isEntranceActive.current) {
             handleEntranceAnimation();
         }
@@ -298,7 +297,7 @@ const LetterGlitch = ({
         if (smooth) {
             handleSmoothTransitions();
         }
-        
+
         // Only redraw when necessary
         if (needsRedraw.current) {
             drawLetters();
@@ -315,10 +314,10 @@ const LetterGlitch = ({
         animationStartTime.current = Date.now();
         lastFrameTime.current = Date.now();
         resizeCanvas();
-        
+
         // Immediately mark as needing redraw
         needsRedraw.current = true;
-        
+
         animate();
 
         // let resizeTimeout;
