@@ -1,6 +1,6 @@
 ---
 import MaskHeader from "@components/header/headerMask.astro";
-import Glitch from "@components/letterGlitch/Glitch";
+import LetterGlitch from "@components/letterGlitch/glitch";
 import Footer from "@components/footer.astro";
 import BackTo from "@components/backTo.astro";
 import Tab from "@components/tab.astro";
@@ -27,7 +27,7 @@ const { title } = Astro.props;
   <body id="pageLayout" class="themeBase">
     <MaskHeader />
     <div class="h-full w-full fixed top-0 left-0 -z-10">
-      <Glitch client:only="react" />
+      <LetterGlitch client:only="react" />
     </div>
     <main class="grid grid-cols-[1fr_min(65ch,90%)_1fr] overflow-y-auto">
       <article class="min-h-screen relative col-start-2 col-end-3 p-2">
