@@ -1,20 +1,28 @@
 ---
-import { allPosts } from './_postsCollection';
+import { postsByYear } from './_postsCollection';
+
+// Get years in descending order for display
+const years = Object.keys(postsByYear)
+  .map(year => parseInt(year))
+  .sort((a, b) => b - a)
 ---
 
 <main id="postsListWrapper" class="pt-5">
   {
-    allPosts.map((postsCollectionOfYear) => {
+    years.map((year) => {
+      const postsInYear = postsByYear[year]
+      if (postsInYear.length === 0) return null
+      
       return (
-        <div class="grid grid-cols-6 border-t borderBase ">
+        <div class="grid grid-cols-6 border-t borderBase">
           <p class="col-span-1 text-sm text-gray-4 dark:text-dark-2 italic pt-4 pb-4 mr-20">
-            {postsCollectionOfYear[0].collection}
+            {year}
           </p>
-          {postsCollectionOfYear.map((post) => {
+          {postsInYear.map((post, index) => {
             return (
               <a
                 id="posts"
-                href={`/posts/${post.slug}`}
+                href={`/posts/${post.id}`}
                 class:list={[
                   'col-span-5',
                   'col-start-2',
@@ -23,12 +31,17 @@ import { allPosts } from './_postsCollection';
                   'justify-between',
                   'p-4',
                   {
-                    'border-t borderBase': postsCollectionOfYear[0] !== post,
+                    'border-t borderBase': index > 0,
                   },
                 ]}
               >
                 <p>{post.data.title}</p>
-                <p class="text-gray-4 dark:text-dark-2">{post.data.pubDate}</p>
+                <p class="text-gray-4 dark:text-dark-2">
+                  {post.data.pubDate.toLocaleDateString('en-US', {
+                    month: 'short',
+                    day: 'numeric'
+                  })}
+                </p>
               </a>
             )
           })}

@@ -2,7 +2,7 @@
 layout: ../../layouts/postsLayout.astro
 title: Earth
 collection: 2022
-pubDate: 11/23
+pubDate: 2022-11-23T00:00:00.000Z
 slug: earth
 description: Our beautiful hometown
 ---
