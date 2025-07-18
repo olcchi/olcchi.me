@@ -1,8 +1,8 @@
 ---
 layout: ../../layouts/postsLayout.astro
 title: Moving to a new space
-collection: 2022
-pubDate: 4/24
+collection: 2023
+pubDate: 2023-04-24T00:00:00.000Z
 slug: new-space
 description: New homepage, from a new design
 ---

@@ -1,16 +1,35 @@
 ---
-import { getCollection } from 'astro:content'
+import { getCollection, render } from 'astro:content'
+import PostsLayout from '@layouts/postsLayout.astro'
+
+/**
+ * Generate static paths for all blog posts
+ * Uses the new unified posts collection
+ */
 export async function getStaticPaths() {
-  const Posts2022 = await getCollection('2022')
-  const Posts2023 = await getCollection('2023')
-  const blogEntries = [...Posts2022, ...Posts2023]
-  return blogEntries.map(entry => ({
-    params: { post: entry.slug }, props: { entry },
+  // Get all posts from the unified collection
+  const posts = await getCollection('posts', ({ data }) => {
+    // Filter out draft posts in production
+    return import.meta.env.DEV || !data.draft
+  })
+  
+  return posts.map(entry => ({
+    params: { post: entry.id }, 
+    props: { entry },
   }))
 }
+
 const { entry } = Astro.props
-const { Content } = await entry.render()
+const { Content, remarkPluginFrontmatter } = await render(entry)
+
+// Merge entry data with remark plugin frontmatter (includes minutesRead)
+const frontmatter = {
+  ...entry.data,
+  ...remarkPluginFrontmatter
+}
 
 ---
 
- <Content />
+<PostsLayout frontmatter={frontmatter}>
+  <Content />
+</PostsLayout>

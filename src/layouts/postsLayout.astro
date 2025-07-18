@@ -1,6 +1,14 @@
 ---
 import Layout from '@layouts/Layout.astro'
 const { title, pubDate, minutesRead, collection } = Astro.props.frontmatter
+
+// Format date to simple YYYY/M/D format
+const formatDate = (date: Date) => {
+  const year = date.getFullYear()
+  const month = date.getMonth() + 1
+  const day = date.getDate()
+  return `${year}/${month}/${day}`
+}
 ---
 
 <Layout title={title}>
@@ -11,7 +19,7 @@ const { title, pubDate, minutesRead, collection } = Astro.props.frontmatter
           {title}
         </p>
         <p class="text-sm text-dark-1 dark:text-gray-4">
-          {`${collection}/${pubDate}`} · {minutesRead}
+          {formatDate(pubDate)} · {minutesRead}
         </p>
       </section>
       <div class="prose">
