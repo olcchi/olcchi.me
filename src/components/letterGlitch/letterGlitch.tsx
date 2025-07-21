@@ -117,21 +117,30 @@ const LetterGlitch = ({
         if (!parent) return;
 
         const dpr = window.devicePixelRatio || 1;
-        // Use innerHeight instead of screen.height
-        const screenHeight = window.innerHeight;
-        // Use innerWidth instead of screen.width
-        const screenWidth = window.innerWidth;
-        canvas.width = screenWidth * dpr;
-        canvas.height = screenHeight * dpr;
+        // Use viewport dimensions for responsive behavior
+        const viewportWidth = window.innerWidth;
+        const viewportHeight = window.innerHeight;
+        
+        // Only resize if width actually changed (ignore height changes to prevent mobile browser bar issues)
+        const currentWidth = canvas.width / dpr;
+        if (currentWidth === viewportWidth) {
+            return;
+        }
+        
+        canvas.width = viewportWidth * dpr;
+        canvas.height = viewportHeight * dpr;
 
-        canvas.style.width = `${screenWidth}px`;
-        canvas.style.height = `${screenHeight}px`;
+        canvas.style.width = `${viewportWidth}px`;
+        canvas.style.height = `${viewportHeight}px`;
 
         if (context.current) {
             context.current.setTransform(dpr, 0, 0, dpr, 0, 0);
+            // Restore font settings after transform
+            context.current.font = `${fontSize}px monospace`;
+            context.current.textBaseline = "top";
         }
 
-        const { columns, rows } = calculateGrid(screenWidth, screenHeight);
+        const { columns, rows } = calculateGrid(viewportWidth, viewportHeight);
         initializeLetters(columns, rows);
         needsRedraw.current = true;
     }, [calculateGrid, initializeLetters]);
@@ -320,24 +329,38 @@ const LetterGlitch = ({
 
         animate();
 
-        // let resizeTimeout;
-        // const handleResize = () => {
-        //     clearTimeout(resizeTimeout);
-        //     resizeTimeout = setTimeout(() => {
-        //         cancelAnimationFrame(animationRef.current!);
-        //         animationStartTime.current = Date.now();
-        //         isEntranceActive.current = true;
-        //         resizeCanvas();
-        //         animate();
-        //     }, 500);
-        // };
+        let resizeTimeout: ReturnType<typeof setTimeout>;
+        let lastWidth = window.innerWidth;
+        
+        const handleResize = () => {
+            const currentWidth = window.innerWidth;
+            // Only trigger resize if width actually changed
+            if (currentWidth === lastWidth) {
+                return;
+            }
+            lastWidth = currentWidth;
+            
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(() => {
+                if (animationRef.current) {
+                    cancelAnimationFrame(animationRef.current);
+                }
+                animationStartTime.current = Date.now();
+                isEntranceActive.current = true;
+                resizeCanvas();
+                animate();
+            }, 300); // Reduced timeout for better responsiveness
+        };
 
-        // window.addEventListener("resize", handleResize);
+        // Only listen to resize events, filter out height-only changes
+        window.addEventListener("resize", handleResize);
+        
         return () => {
             if (animationRef.current) {
                 cancelAnimationFrame(animationRef.current);
             }
-            // window.removeEventListener("resize", handleResize);
+            window.removeEventListener("resize", handleResize);
+            clearTimeout(resizeTimeout);
         };
     }, [animate, resizeCanvas]);
 
