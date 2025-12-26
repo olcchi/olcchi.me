@@ -112,7 +112,7 @@ export default function FaultyTerminalBg() {
 
   return (
     <div className="h-full">
-      <div className="absolute top-0 left-0 w-full h-full bg-white/70 dark:bg-black/70 z-10" />
+      <div className="absolute top-0 left-0 w-full h-full bg-white/10 dark:bg-black/10 z-10 backdrop-blur-sm md:backdrop-blur-0" />
       <FaultyTerminal
         scale={2.5}
         gridMul={[2, 1]}
