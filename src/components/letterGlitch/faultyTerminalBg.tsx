@@ -114,17 +114,17 @@ export default function FaultyTerminalBg() {
     <div className="h-full">
       <div className="absolute top-0 left-0 w-full h-full bg-white/10 dark:bg-black/10 z-10 backdrop-blur-sm md:backdrop-blur-0" />
       <FaultyTerminal
-        scale={2.5}
+        scale={5}
         gridMul={[2, 1]}
         digitSize={1.5}
-        timeScale={.3}
+        timeScale={.1}
         pause={false}
         mouseReact={false}
         mouseStrength={0.5}
-        scanlineIntensity={0.1}
+        scanlineIntensity={0}
         glitchAmount={0}
         flickerAmount={0.5}
-        noiseAmp={1}
+        noiseAmp={0.5}
         tint={colors.tint}
         backgroundTint={colors.backgroundTint}
         centerVignette={true}
