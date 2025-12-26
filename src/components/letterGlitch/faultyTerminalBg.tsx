@@ -127,7 +127,7 @@ export default function FaultyTerminalBg() {
         noiseAmp={1}
         tint={colors.tint}
         backgroundTint={colors.backgroundTint}
-        centerVignette={false}
+        centerVignette={true}
       />
     </div>
   );
