@@ -380,9 +380,27 @@ export default function FaultyTerminal({
 
     const mesh = new Mesh(gl, { geometry, program });
 
+    let prevWidth = 0;
+    let prevHeight = 0;
+
     function resize() {
       if (!ctn || !renderer) return;
-      renderer.setSize(ctn.offsetWidth, ctn.offsetHeight);
+      const width = ctn.offsetWidth;
+      const height = ctn.offsetHeight;
+
+      // 避免移动端因为地址栏收起/展开导致频繁 resize 和重绘
+      const isWidthChanged = width !== prevWidth;
+      const isHeightChanged = height !== prevHeight;
+
+      // 如果宽度没变，且高度变化较小（通常是浏览器导航栏），则跳过 resize
+      if (prevWidth !== 0 && !isWidthChanged && isHeightChanged && Math.abs(height - prevHeight) < 150) {
+        return;
+      }
+
+      prevWidth = width;
+      prevHeight = height;
+
+      renderer.setSize(width, height);
       program.uniforms.iResolution.value = new Color(
         gl.canvas.width,
         gl.canvas.height,
