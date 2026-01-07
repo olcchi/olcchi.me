@@ -1,40 +1,45 @@
 ---
-import { projects } from '@components/projectsList/_projectList'
-const projectsListLitght = projects.slice(0, 4);
+import { projects } from "@components/projectsList/_projectList";
+const projectsListLight = projects.slice(0, 4);
 ---
+
 <main>
   <a
-  href="/projects"
-  class="flex items-center gap-2 decoration-none border-none cursor-pointer hover:opacity-30 w-32"
+    href="/projects"
+    class="flex items-center gap-2 decoration-none border-none cursor-pointer hover:opacity-30 w-32"
   >
-  <p id="blockTitle">Projects</p><div class="i-ph-arrow-up-right"></div>
+    <p id="blockTitle">Projects</p><div class="i-ph-arrow-up-right"></div>
   </a>
   <div class="not-prose grid md:grid-cols-2 gap-5">
-      {
-        projectsListLitght.map((project) => {
-          return (
-            <div id="project" class="flex flex-col gap-2">
-              <div class="flex items-center gap-2">
-                <a target="_blank" href={project.repoLink} class="italic font-sans font-bold border-none">
-                  {project.projectName}
-                </a>
-                <div class="flex items-center">
-                  <a
-                    target="_blank"
-                    href={project.repoLink}
-                    class=" font-sans opacity-50 hover:opacity-100 i-ph-github-logo block transition-opacity"
-                  />
-                  <a
-                    target="_blank"
-                    href={project.previewLink}
-                    class=" font-sans opacity-50 hover:opacity-100 i-ph-link block transition-opacity"
-                  />
-                </div>
+    {
+      projectsListLight.map((project) => {
+        return (
+          <div id="project" class="flex flex-col gap-2">
+            <div class="flex items-center gap-2">
+              <a
+                target="_blank"
+                href={project.repoLink}
+                class="italic font-sans font-bold border-none"
+              >
+                {project.projectName}
+              </a>
+              <div class="flex items-center">
+                <a
+                  target="_blank"
+                  href={project.repoLink}
+                  class=" font-sans opacity-50 hover:opacity-100 i-ph-github-logo block transition-opacity"
+                />
+                <a
+                  target="_blank"
+                  href={project.previewLink}
+                  class=" font-sans opacity-50 hover:opacity-100 i-ph-link block transition-opacity"
+                />
               </div>
-              <p class="font-sans text-sm">{project.description}</p>
             </div>
-          )
-        })
-      }
-    </div>
+            <p class="font-sans text-sm">{project.description}</p>
+          </div>
+        );
+      })
+    }
+  </div>
 </main>

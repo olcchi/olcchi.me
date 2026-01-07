@@ -1,123 +1,95 @@
+import React, { useState, useEffect, useMemo } from 'react';
 import FaultyTerminal from './FaultyTerminal';
-import { useState, useEffect } from 'react';
 
 /**
- * 获取当前主题模式
- * @returns 'dark' | 'light'
+ * 自定义 Hook: 统一管理主题监听逻辑
  */
-function getCurrentTheme(): 'dark' | 'light' {
-  if (typeof window === 'undefined') return 'dark';
-
-  // 优先检查 localStorage
-  const storedTheme = localStorage.getItem('globalTheme');
-  if (storedTheme === 'dark' || storedTheme === 'light') {
-    return storedTheme;
-  }
-
-  // 检查 DOM 类名
-  if (document.documentElement.classList.contains('dark')) {
-    return 'dark';
-  }
-
-  // 检查系统偏好
-  if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-    return 'dark';
-  }
-
-  return 'light';
-}
-
-/**
- * 根据主题模式获取对应的颜色配置
- * @param theme 主题模式
- * @returns { tint: string, backgroundTint: string }
- */
-function getThemeColors(theme: 'dark' | 'light'): { tint: string; backgroundTint: string } {
-  if (theme === 'dark') {
-    return {
-      tint: '#FBF9EF',
-      backgroundTint: '#131313',
-    };
-  } else {
-    return {
-      tint: '#131313',
-      backgroundTint: '#FBF9EF',
-    };
-  }
-}
-
-export default function FaultyTerminalBg() {
-  const [theme, setTheme] = useState<'dark' | 'light'>(() => getCurrentTheme());
-  const colors = getThemeColors(theme);
+function useThemeMode() {
+  const [theme, setTheme] = useState<'dark' | 'light'>('dark');
 
   useEffect(() => {
-    // 初始化时获取主题
-    setTheme(getCurrentTheme());
+    const getResolvedTheme = (): 'dark' | 'light' => {
+      if (typeof window === 'undefined') return 'dark';
 
-    // 监听 DOM 类名变化（主题切换时）
+      // 1. 检查 localStorage
+      const storedTheme = localStorage.getItem('globalTheme');
+      if (storedTheme === 'dark' || storedTheme === 'light') return storedTheme;
+
+      // 2. 检查 DOM 类名
+      if (document.documentElement.classList.contains('dark')) return 'dark';
+
+      // 3. 检查系统偏好
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    };
+
+    // 初始化主题
+    setTheme(getResolvedTheme());
+
+    // 监听 DOM class 变化 (Tailwind 等框架常用)
     const observer = new MutationObserver(() => {
-      const newTheme = getCurrentTheme();
-      setTheme((currentTheme) => {
-        if (newTheme !== currentTheme) {
-          return newTheme;
-        }
-        return currentTheme;
-      });
+      setTheme(getResolvedTheme());
     });
-
-    // 监听 document.documentElement 的 class 属性变化
     observer.observe(document.documentElement, {
       attributes: true,
       attributeFilter: ['class'],
     });
 
-    // 监听 localStorage 变化（跨标签页同步）
-    const handleStorageChange = (e: StorageEvent) => {
-      if (e.key === 'globalTheme' && e.newValue) {
-        const newTheme = e.newValue === 'dark' ? 'dark' : 'light';
-        setTheme((currentTheme) => {
-          if (newTheme !== currentTheme) {
-            return newTheme;
-          }
-          return currentTheme;
-        });
-      }
-    };
-
-    window.addEventListener('storage', handleStorageChange);
-
-    // 监听系统主题变化
+    // 监听系统主题偏好变化
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
     const handleMediaChange = () => {
-      // 只有在没有 localStorage 设置时才响应系统偏好
       if (!localStorage.getItem('globalTheme')) {
-        const newTheme = mediaQuery.matches ? 'dark' : 'light';
-        setTheme((currentTheme) => {
-          if (newTheme !== currentTheme) {
-            return newTheme;
-          }
-          return currentTheme;
-        });
+        setTheme(mediaQuery.matches ? 'dark' : 'light');
       }
     };
-
     mediaQuery.addEventListener('change', handleMediaChange);
+
+    // 监听跨标签页同步
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === 'globalTheme' && e.newValue) {
+        setTheme(e.newValue === 'dark' ? 'dark' : 'light');
+      }
+    };
+    window.addEventListener('storage', handleStorageChange);
 
     return () => {
       observer.disconnect();
-      window.removeEventListener('storage', handleStorageChange);
       mediaQuery.removeEventListener('change', handleMediaChange);
+      window.removeEventListener('storage', handleStorageChange);
     };
   }, []);
 
+  return theme;
+}
+
+/**
+ * 主组件
+ */
+export default function FaultyTerminalBg() {
+  const theme = useThemeMode();
+
+  // 使用 useMemo 缓存颜色配置，避免组件重绘时重新创建对象
+  const themeColors = useMemo(() => {
+    return theme === 'dark'
+      ? { tint: '#FBF9EF', backgroundTint: '#131313' }
+      : { tint: '#131313', backgroundTint: '#FBF9EF' };
+  }, [theme]);
+
   return (
-    <div style={{ height: '100lvh' }}>
-      <div className="absolute inset-0 bg-white/10 dark:bg-black/10 z-10 backdrop-blur-sm md:backdrop-blur-0" />
+    <div className="relative w-full h-[100lvh] overflow-hidden bg-background">
+      {/* 遮罩层：
+        - pointer-events-none 确保不会拦截点击事件
+        - z-10 浮在动画上方
+      */}
+      <div
+        className="absolute inset-0 z-10 bg-white/10 dark:bg-black/10 backdrop-blur-sm md:backdrop-blur-0 pointer-events-none"
+        aria-hidden="true"
+      />
+
       <FaultyTerminal
         scale={5}
         gridMul={[2, 1]}
         digitSize={1.5}
-        timeScale={.1}
+        timeScale={0.1}
         pause={false}
         mouseReact={false}
         mouseStrength={0.5}
@@ -125,11 +97,11 @@ export default function FaultyTerminalBg() {
         glitchAmount={0}
         flickerAmount={0.5}
         noiseAmp={0.5}
-        tint={colors.tint}
-        backgroundTint={colors.backgroundTint}
         centerVignette={true}
+        // 应用计算后的颜色
+        tint={themeColors.tint}
+        backgroundTint={themeColors.backgroundTint}
       />
     </div>
   );
 }
-
