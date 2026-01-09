@@ -469,9 +469,14 @@ export default function FaultyTerminal({
   ]);
 
   return (
-    <div ref={containerRef} className={`w-full h-full relative overflow-hidden ${className}`} style={style} {...rest}>
+    <div
+      ref={containerRef}
+      className={`w-full relative overflow-hidden ${className}`}
+      style={{ height: '100lvh', ...style }}
+      {...rest}
+    >
       {centerVignette && (
-        <div className="absolute top-0 left-0 w-full h-full pointer-events-none bg-gradient-repeating-radial from-gray-50 dark:from-black to-transparent" />
+        <div className="absolute top-0 left-0 w-full pointer-events-none bg-gradient-repeating-radial from-gray-50 dark:from-black to-transparent" style={{ height: '100lvh' }} />
       )}
     </div>
   );
