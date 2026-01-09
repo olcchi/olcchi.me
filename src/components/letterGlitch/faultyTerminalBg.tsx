@@ -112,7 +112,6 @@ export default function FaultyTerminalBg() {
 
   return (
     <div style={{ height: '100lvh' }}>
-      <div className="absolute top-0 left-0 w-full bg-white/10 dark:bg-black/10 z-10 backdrop-blur-sm md:backdrop-blur-0" style={{ height: '100lvh' }} />
       <FaultyTerminal
         scale={5}
         gridMul={[2, 1]}
