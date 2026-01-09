@@ -1,11 +1,9 @@
 ---
-import { projects } from './_projectList';
+import { projects } from "./_projectList";
 ---
 
 <div id="postsListWrapper" class="pt-5 animate-delay-150">
-  <section
-    class="grid md:grid-cols-2  gap-4 border-t borderBase pt-5 pb-5"
-  >
+  <section class="grid md:grid-cols-2 gap-4 border-t borderBase pt-5 pb-5">
     {
       projects.map((project) => {
         return (
@@ -14,7 +12,13 @@ import { projects } from './_projectList';
             class="grid-span-2 flex flex-col border-b borderBase pb-5 gap-1"
           >
             <div class=" flex items-center gap-2">
-              <a target="_blank" href={project.repoLink} class="font-bold font-sans text-base cursor-pointer">{project.projectName}</a>
+              <a
+                target="_blank"
+                href={project.repoLink}
+                class="font-bold font-sans text-base cursor-pointer"
+              >
+                {project.projectName}
+              </a>
               <div class="flex items-center">
                 <a
                   target="_blank"
@@ -30,15 +34,18 @@ import { projects } from './_projectList';
             </div>
             <p class="font-sans text-base text-sm">{project.description}</p>
           </div>
-        )
+        );
       })
     }
   </section>
 </div>
 
 <style is:global>
+  #project {
+    @apply md:transition-colors md:ease-in-out md:duration-300;
+  }
   #postsListWrapper:hover #project {
-    @apply md:dark:text-dark-2 md:text-gray-3 md:transition-colors md:ease-in-out md:duration-300;
+    @apply md:dark:text-dark-2 md:text-gray-3;
   }
   #postsListWrapper:hover #project:hover {
     @apply md:text-black md:dark:text-white md:transition-colors md:ease-in-out md:duration-100;
