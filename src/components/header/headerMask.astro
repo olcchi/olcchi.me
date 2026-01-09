@@ -1,28 +1,28 @@
 ---
-import NavBar from '@components/header/Header.astro'
+import NavBar from "@components/header/Header.astro";
 ---
 
 <main
   id="mask"
   class="fixed -top-1 flex items-center justify-between w-full z-30 p-2"
 >
-  <section id="navWrapper" class="w-full transition-opacity  md:opacity-100">
+  <section id="navWrapper" class="w-full transition-opacity md:opacity-100">
     <NavBar />
   </section>
 </main>
 <script>
-const navWrapper = document.getElementById('navWrapper')!
-let currentYPostion
-let isDown
-const dynamicNav = () => {
-  navWrapper.classList.toggle('opacity-0', isDown)
-  navWrapper.classList.toggle('opacity-100', !isDown)
-}
-window.addEventListener('scroll', () => {
-  currentYPostion = window.scrollY
-  isDown = currentYPostion > 30
-  dynamicNav()
-})
+  const navWrapper = document.getElementById("navWrapper")!;
+  let currentYPostion;
+  let isDown;
+  const dynamicNav = () => {
+    navWrapper.classList.toggle("opacity-0", isDown);
+    navWrapper.classList.toggle("opacity-100", !isDown);
+  };
+  window.addEventListener("scroll", () => {
+    currentYPostion = window.scrollY;
+    isDown = currentYPostion > 30;
+    dynamicNav();
+  });
 </script>
 <style>
   #mask::before {
