@@ -276,6 +276,9 @@ function hexToRgba(hex: string): [number, number, number, number] {
   ];
 }
 
+// Default DPR calculated once at module level to avoid SSR issues
+const DEFAULT_DPR = typeof window !== 'undefined' ? Math.min(window.devicePixelRatio || 1, 2) : 1;
+
 export default function FaultyTerminal({
   scale = 1,
   gridMul = [2, 1],
@@ -290,11 +293,11 @@ export default function FaultyTerminal({
   dither = 0,
   curvature = 0.2,
   tint = '#ffffff',
-  backgroundTint = '#000000', // 【新增】默认为黑色
-  centerVignette = false, // 【新增】默认关闭中间区域渐变
+  backgroundTint = '#000000',
+  centerVignette = false,
   mouseReact = true,
   mouseStrength = 0.2,
-  dpr = Math.min(window.devicePixelRatio || 1, 2),
+  dpr = DEFAULT_DPR,
   pageLoadAnimation = true,
   brightness = 1,
   backgroundColor = '#000000',
@@ -312,12 +315,14 @@ export default function FaultyTerminal({
   const loadAnimationStartRef = useRef<number>(0);
   const timeOffsetRef = useRef<number>(Math.random() * 100);
 
+  // Memoize color vectors to prevent unnecessary recalculations
   const tintVec = useMemo(() => hexToRgb(tint), [tint]);
-  // 【新增】计算背景色向量
   const backgroundTintVec = useMemo(() => hexToRgb(backgroundTint), [backgroundTint]);
   const backgroundColorVec = useMemo(() => hexToRgba(backgroundColor), [backgroundColor]);
-
   const ditherValue = useMemo(() => (typeof dither === 'boolean' ? (dither ? 1 : 0) : dither), [dither]);
+  
+  // Memoize gridMul to prevent array reference changes
+  const gridMulArray = useMemo(() => new Float32Array(gridMul), [gridMul[0], gridMul[1]]);
 
   const handleMouseMove = useCallback((e: MouseEvent) => {
     const ctn = containerRef.current;
@@ -354,7 +359,7 @@ export default function FaultyTerminal({
         },
         uScale: { value: scale },
 
-        uGridMul: { value: new Float32Array(gridMul) },
+        uGridMul: { value: gridMulArray },
         uDigitSize: { value: digitSize },
         uScanlineIntensity: { value: scanlineIntensity },
         uGlitchAmount: { value: glitchAmount },
@@ -449,7 +454,7 @@ export default function FaultyTerminal({
     pause,
     timeScale,
     scale,
-    gridMul,
+    gridMulArray,
     digitSize,
     scanlineIntensity,
     glitchAmount,
@@ -459,7 +464,7 @@ export default function FaultyTerminal({
     ditherValue,
     curvature,
     tintVec,
-    backgroundTintVec, // 【新增】依赖项
+    backgroundTintVec,
     mouseReact,
     mouseStrength,
     pageLoadAnimation,

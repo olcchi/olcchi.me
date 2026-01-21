@@ -11,7 +11,7 @@ const years = Object.keys(postsByYear)
   {
     years.map((year) => {
       const postsInYear = postsByYear[year];
-      if (postsInYear.length === 0) return null;
+      if (!postsInYear || postsInYear.length === 0) return null;
 
       return (
         <div class="grid grid-cols-6 border-t borderBase">

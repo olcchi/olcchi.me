@@ -13,17 +13,17 @@ const { title } = Astro.props;
 ---
 
 <!doctype html>
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width" />
-    <title>{title}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="yi's personal website - user interface builder and freelance photographer" />
+    <title>{title}</title>
     <link rel="icon" href="/favicon.svg" />
     <script
       defer
-      src="https://cloud.umami.is/script.js "
-      data-website-id=`${import.meta.env.UMAMI_WEBSITE_ID}`></script>
+      src="https://cloud.umami.is/script.js"
+      data-website-id={import.meta.env.UMAMI_WEBSITE_ID}></script>
   </head>
   <body id="pageLayout" class="themeBase">
     <MaskHeader />

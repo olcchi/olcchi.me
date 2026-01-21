@@ -11,18 +11,22 @@ const allPostsRaw = await getCollection('posts', ({ data }) => {
 
 /**
  * All posts sorted by publication date (newest first)
- * and grouped by collection year for easy access
  */
 export const allPosts = allPostsRaw
   .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime())
 
 /**
- * Posts grouped by year for backward compatibility
+ * Posts dynamically grouped by year
+ * Automatically includes all years present in the posts collection
  */
-export const postsByYear = {
-  2023: allPosts.filter(post => post.data.collection === 2023),
-  2022: allPosts.filter(post => post.data.collection === 2022),
-}
+export const postsByYear: Record<number, typeof allPosts> = allPosts.reduce((acc, post) => {
+  const year = post.data.collection
+  if (!acc[year]) {
+    acc[year] = []
+  }
+  acc[year].push(post)
+  return acc
+}, {} as Record<number, typeof allPosts>)
 
 /**
  * Get posts by specific year

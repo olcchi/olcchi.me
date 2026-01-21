@@ -6,18 +6,12 @@
     "allowJs": true,
     "baseUrl": ".",
     "paths": {
-      "@layouts/*": [
-        "src/layouts/*"
-      ],
-      "@components/*": [
-        "src/components/*"
-      ],
-      "@assets/*": [
-        "src/assets/*"
-      ],
-      "@scripts/*": [
-        "src/scripts/*"
-      ]
+      "@layouts/*": ["src/layouts/*"],
+      "@components/*": ["src/components/*"],
+      "@assets/*": ["src/assets/*"],
+      "@scripts/*": ["src/scripts/*"],
+      "@styles/*": ["src/styles/*"],
+      "@content/*": ["src/content/*"]
     },
     "jsx": "react-jsx",
     "jsxImportSource": "react"
