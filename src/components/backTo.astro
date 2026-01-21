@@ -8,15 +8,14 @@ const { backTo } = Astro.props;
 <main>
   <a
     href={`/${backTo}`}
-    class:list={['w-min flex items-center cursor-pointer hover:opacity-50 transition-opacity ease']}
+    class:list={[
+      "w-min flex items-center cursor-pointer hover:opacity-50 transition-opacity ease",
+    ]}
   >
-    <i
-      class:list={[
-        { 'i-ph-arrow-up-left': backTo !== '' },
-        { 'i-ph-arrow-line-left': backTo === '' },
-      ]}></i>
+    <i class:list={[backTo ? "i-ph-arrow-up-left" : "i-ph-arrow-line-left"]}
+    ></i>
     <p class="ml-1 font-serif font-medium w-16">
-      {backTo || 'Index'}
+      {backTo || "Index"}
     </p>
   </a>
 </main>

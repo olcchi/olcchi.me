@@ -90,17 +90,16 @@ float fbm(vec2 p)
   float f = 0.0;
   float amp = 0.5 * uNoiseAmp;
   
-  mat2 modify0 = rotate(time * 0.02);
+  mat2 rot2 = rotate(time * 0.02);
   f += amp * noise(p);
-  p = modify0 * p * 2.0;
+  p = rot2 * p * 2.0;
   amp *= 0.454545;
   
-  mat2 modify1 = rotate(time * 0.02);
   f += amp * noise(p);
-  p = modify1 * p * 2.0;
+  p = rot2 * p * 2.0;
   amp *= 0.454545;
   
-  mat2 modify2 = rotate(time * 0.08);
+  mat2 rot8 = rotate(time * 0.08);
   f += amp * noise(p);
   
   return f;
@@ -128,38 +127,34 @@ float digit(vec2 p){
         vec2 mouseWorld = uMouse * uScale;
         float distToMouse = distance(s, mouseWorld);
         float mouseInfluence = exp(-distToMouse * 8.0) * uMouseStrength * 10.0;
-        intensity += mouseInfluence;
-        
         float ripple = sin(distToMouse * 20.0 - iTime * 5.0) * 0.1 * mouseInfluence;
-        intensity += ripple;
+        intensity += mouseInfluence + ripple;
     }
     
     if(uUsePageLoadAnimation > 0.5){
         float cellRandom = fract(sin(dot(s, vec2(12.9898, 78.233))) * 43758.5453);
-        float cellDelay = cellRandom * 0.8;
-        float cellProgress = clamp((uPageLoadProgress - cellDelay) / 0.2, 0.0, 1.0);
-        
-        float fadeAlpha = smoothstep(0.0, 1.0, cellProgress);
-        intensity *= fadeAlpha;
+        float cellProgress = clamp((uPageLoadProgress - cellRandom * 0.8) / 0.2, 0.0, 1.0);
+        intensity *= smoothstep(0.0, 1.0, cellProgress);
     }
     
     p = fract(p);
     p *= uDigitSize;
     
+    // Bounds check
+    if (any(lessThan(p, vec2(0.0))) || any(greaterThan(p, vec2(1.0)))) return 0.0;
+
     float px5 = p.x * 5.0;
     float py5 = (1.0 - p.y) * 5.0;
-    float x = fract(px5);
-    float y = fract(py5);
     
-    float i = floor(py5) - 2.0;
-    float j = floor(px5) - 2.0;
-    float n = i * i + j * j;
+    vec2 grid5 = floor(vec2(px5, py5));
+    vec2 subP = fract(vec2(px5, py5));
+    
+    vec2 distVec = grid5 - 2.0;
+    float n = dot(distVec, distVec);
     float f = n * 0.0625;
     
     float isOn = step(0.1, intensity - f);
-    float brightness = isOn * (0.2 + y * 0.8) * (0.75 + x * 0.25);
-    
-    return step(0.0, p.x) * step(p.x, 1.0) * step(0.0, p.y) * step(p.y, 1.0) * brightness;
+    return isOn * (0.2 + subP.y * 0.8) * (0.75 + subP.x * 0.25);
 }
 
 float onOff(float a, float b, float c)
@@ -239,17 +234,6 @@ void main() {
 }
 `;
 
-function hexToRgb(hex: string): [number, number, number] {
-  let h = hex.replace('#', '').trim();
-  if (h.length === 3)
-    h = h
-      .split('')
-      .map(c => c + c)
-      .join('');
-  const num = parseInt(h, 16);
-  return [((num >> 16) & 255) / 255, ((num >> 8) & 255) / 255, (num & 255) / 255];
-}
-
 function hexToRgba(hex: string): [number, number, number, number] {
   let h = hex.replace('#', '').trim();
   let alpha = 1;
@@ -262,11 +246,9 @@ function hexToRgba(hex: string): [number, number, number, number] {
     h = h.slice(0, 3);
   }
 
-  if (h.length === 3)
-    h = h
-      .split('')
-      .map(c => c + c)
-      .join('');
+  if (h.length === 3) {
+    h = h.split('').map(c => c + c).join('');
+  }
   const num = parseInt(h, 16);
   return [
     ((num >> 16) & 255) / 255,
@@ -274,6 +256,11 @@ function hexToRgba(hex: string): [number, number, number, number] {
     (num & 255) / 255,
     alpha
   ];
+}
+
+function hexToRgb(hex: string): [number, number, number] {
+  const rgba = hexToRgba(hex);
+  return [rgba[0], rgba[1], rgba[2]];
 }
 
 // Default DPR calculated once at module level to avoid SSR issues

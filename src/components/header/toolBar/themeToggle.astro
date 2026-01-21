@@ -5,89 +5,86 @@
 </div>
 
 <script is:inline>
-const themeToggle = document.getElementById('themeToggle')
+  const themeToggle = document.getElementById("themeToggle");
 
-const cssVariables = [
-  [
-    { '--astro-code-color-text': '#333333' },
-    { '--astro-code-color-background': '#f4f4f5' },
-    { '--astro-code-token-constant': '#c7792b' },
-    { '--astro-code-token-string': '#377961' },
-    { '--astro-code-token-comment': '#ffffff4f' },
-    { '--astro-code-token-keyword': '#c05386' },
-    { '--astro-code-token-parameter': '#6b588e' },
-    { '--astro-code-token-function': '#668f9a' },
-    { '--astro-code-token-string-expression': '#6b588e' },
-    { '--astro-code-token-punctuation': '#0000005f' },
-    { '--astro-code-token-link': '#a0a0a0' },
-    { 'white-space': 'normal' },
-  ],
-  [
-    { '--astro-code-color-text': '#dddddd' },
-    { '--astro-code-color-background': '#09090b' },
-    { '--astro-code-token-constant': '#f6c177' },
-    { '--astro-code-token-string': '#74ccaa' },
-    { '--astro-code-token-comment': '#ffffff4f' },
-    { '--astro-code-token-keyword': '#ed9cc2' },
-    { '--astro-code-token-parameter': '#a0a5d6' },
-    { '--astro-code-token-function': '#5fb5be' },
-    { '--astro-code-token-string-expression': '#a0a5d6' },
-    { '--astro-code-token-punctuation': '#ffffff5f' },
-    { '--astro-code-token-link': '#808080' },
-  ],
-]
+  const cssVariables = {
+    light: {
+      "--astro-code-color-text": "#333333",
+      "--astro-code-color-background": "#f4f4f5",
+      "--astro-code-token-constant": "#c7792b",
+      "--astro-code-token-string": "#377961",
+      "--astro-code-token-comment": "#ffffff4f",
+      "--astro-code-token-keyword": "#c05386",
+      "--astro-code-token-parameter": "#6b588e",
+      "--astro-code-token-function": "#668f9a",
+      "--astro-code-token-string-expression": "#6b588e",
+      "--astro-code-token-punctuation": "#0000005f",
+      "--astro-code-token-link": "#a0a0a0",
+    },
+    dark: {
+      "--astro-code-color-text": "#dddddd",
+      "--astro-code-color-background": "#09090b",
+      "--astro-code-token-constant": "#f6c177",
+      "--astro-code-token-string": "#74ccaa",
+      "--astro-code-token-comment": "#ffffff4f",
+      "--astro-code-token-keyword": "#ed9cc2",
+      "--astro-code-token-parameter": "#a0a5d6",
+      "--astro-code-token-function": "#5fb5be",
+      "--astro-code-token-string-expression": "#a0a5d6",
+      "--astro-code-token-punctuation": "#ffffff5f",
+      "--astro-code-token-link": "#808080",
+    },
+  };
 
-const shikiTheme = () => {
-  return localStorage.getItem('globalTheme') !== 'dark'
-    ? cssVariables[0].forEach((item) => {
-      document.documentElement.style.setProperty(
-        Object.keys(item)[0],
-        Object.values(item)[0],
-      )
-    })
-    : cssVariables[1].forEach((item) => {
-      document.documentElement.style.setProperty(
-        Object.keys(item)[0],
-        Object.values(item)[0],
-      )
-    })
-}
-const toggleThemeIcon = () => {
-  shikiTheme()
-  themeToggle.classList.toggle(
-    'i-ph-sun',
-    localStorage.getItem('globalTheme') !== 'dark',
-  )
-  themeToggle.classList.toggle(
-    'i-ph-moon',
-    localStorage.getItem('globalTheme') === 'dark',
-  )
-}
+  const updateShikiTheme = (theme) => {
+    const vars = cssVariables[theme] || cssVariables.light;
+    Object.entries(vars).forEach(([key, value]) => {
+      document.documentElement.style.setProperty(key, value);
+    });
+  };
 
-const colorSchema = window.matchMedia('(prefers-color-scheme: dark)')
-const prefersDark = colorSchema.matches
-const preferTheme = () => {
-  !localStorage.getItem('globalTheme') && localStorage.setItem('globalTheme', prefersDark ? 'dark' : 'light')
-  const setting = localStorage.getItem('globalTheme')
-  if (setting === 'dark' || (prefersDark && setting !== 'light'))
-    document.documentElement.classList.toggle('dark', true)
-  toggleThemeIcon()
-  colorSchema.addEventListener('change', () => {
-    document.documentElement.classList.toggle('dark', colorSchema.matches)
-    localStorage.setItem(
-      'globalTheme',
-      colorSchema.matches ? 'dark' : 'light',
-    )
-    toggleThemeIcon()
-  })
-}
-const toggleTheme = () => {
-  const isDark = document.documentElement.classList.toggle('dark')
-  localStorage.setItem('globalTheme', isDark ? 'dark' : 'light')
-  toggleThemeIcon()
-}
-preferTheme()
-themeToggle.addEventListener('click', toggleTheme)
+  const updateThemeState = () => {
+    const currentTheme = localStorage.getItem("globalTheme") || "light";
+    const isDark = currentTheme === "dark";
+
+    document.documentElement.classList.toggle("dark", isDark);
+    updateShikiTheme(currentTheme);
+
+    if (themeToggle) {
+      themeToggle.classList.toggle("i-ph-sun", !isDark);
+      themeToggle.classList.toggle("i-ph-moon", isDark);
+    }
+  };
+
+  const initTheme = () => {
+    const colorSchema = window.matchMedia("(prefers-color-scheme: dark)");
+
+    if (!localStorage.getItem("globalTheme")) {
+      localStorage.setItem(
+        "globalTheme",
+        colorSchema.matches ? "dark" : "light",
+      );
+    }
+
+    updateThemeState();
+
+    colorSchema.addEventListener("change", (e) => {
+      const newTheme = e.matches ? "dark" : "light";
+      localStorage.setItem("globalTheme", newTheme);
+      updateThemeState();
+    });
+  };
+
+  const toggleTheme = () => {
+    const newTheme = document.documentElement.classList.contains("dark")
+      ? "light"
+      : "dark";
+    localStorage.setItem("globalTheme", newTheme);
+    updateThemeState();
+  };
+
+  initTheme();
+  themeToggle?.addEventListener("click", toggleTheme);
 </script>
 
 <style is:global>

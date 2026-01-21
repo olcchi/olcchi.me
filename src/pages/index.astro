@@ -36,10 +36,10 @@ const classList = [
     <section class:list={classList}>
       <ProjectsListLight />
     </section>
-    <section class:list={[classList]}>
+    <section class:list={classList}>
       <PostsListLight />
     </section>
-    <section class:list={[classList]}>
+    <section class:list={classList}>
       <p id="blockTitle">Now</p>
       <p>
         I am currently in the stage of wild growth when I am first exposed to a
@@ -73,20 +73,21 @@ const classList = [
         >
       </p>
     </section>
-    <section class:list={[classList]}>
+    <section class:list={classList}>
       <Link />
     </section>
   </article>
 </Layout>
 
 <script>
-  const sections: NodeListOf<HTMLElement> = document.querySelectorAll(
-    "article.mainContainer section"
-  );
-  let delay = 50;
+  const sections = document.querySelectorAll("article.mainContainer section");
+  let currentDelay = 50;
+
   sections.forEach((section, index) => {
-    section.style.animationDelay = `${delay}ms`;
-    delay += (index + 1) * 100;
+    if (section instanceof HTMLElement) {
+      section.style.animationDelay = `${currentDelay}ms`;
+      currentDelay += (index + 1) * 100;
+    }
   });
 </script>
 
