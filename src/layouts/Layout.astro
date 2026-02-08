@@ -28,6 +28,12 @@ const { title } = Astro.props;
       defer
       src="https://cloud.umami.is/script.js"
       data-website-id={import.meta.env.UMAMI_WEBSITE_ID}></script>
+    <link
+      rel="alternate"
+      type="application/rss+xml"
+      title="yi - Blog Posts"
+      href={`${Astro.site}rss.xml`}
+    />
     <ClientRouter />
   </head>
   <body id="pageLayout" class="themeBase">

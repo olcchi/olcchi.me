@@ -20,7 +20,7 @@ export async function GET(context) {
   return rss({
     title: 'yi - Blog Posts',
     description: 'Latest blog posts and articles',
-    site: context.site,
+    site: context.site.toString().endsWith('/') ? context.site : `${context.site}/`,
     items: sortedPosts.map(post => ({
       title: post.data.title,
       pubDate: post.data.pubDate,
@@ -32,6 +32,6 @@ export async function GET(context) {
       categories: post.data.tags || [],
     })),
     // Add RSS metadata
-    customData: `<language>en-us</language>`,
+    customData: `<language>zh-cn</language>`,
   })
 }
