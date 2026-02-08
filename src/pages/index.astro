@@ -82,12 +82,11 @@ const classList = [
 <script>
   document.addEventListener("astro:page-load", () => {
     const sections = document.querySelectorAll("article.mainContainer section");
-    let currentDelay = 50;
-
     sections.forEach((section, index) => {
       if (section instanceof HTMLElement) {
-        section.style.animationDelay = `${currentDelay}ms`;
-        currentDelay += (index + 1) * 100;
+        // Increases delay quadratically for a more natural staggered appearance
+        const delay = 50 + index * 100 * ((index + 1) / 2);
+        section.style.animationDelay = `${delay}ms`;
       }
     });
   });

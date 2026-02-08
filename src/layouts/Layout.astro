@@ -11,6 +11,9 @@ interface Props {
   title?: string;
 }
 const { title } = Astro.props;
+const showNavigation = ["posts", "projects"].includes(
+  Astro.url.pathname.replace(/\//g, ""),
+);
 ---
 
 <!doctype html>
@@ -45,15 +48,7 @@ const { title } = Astro.props;
     <main class="grid grid-cols-[1fr_min(65ch,90%)_1fr] overflow-y-auto">
       <article class="min-h-screen relative col-start-2 col-end-3 p-2">
         <div class="mt-20 mb-20 lg:mt-25 lg:mb-20 w-full">
-          <div
-            class:list={[
-              {
-                hidden: !["posts", "projects"].includes(
-                  Astro.url.pathname.replace(/\//g, ""),
-                ),
-              },
-            ]}
-          >
+          <div class:list={[{ hidden: !showNavigation }]}>
             <BackTo backTo="" />
             <Tab />
           </div>

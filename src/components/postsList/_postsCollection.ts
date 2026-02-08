@@ -19,14 +19,12 @@ export const allPosts = allPostsRaw
  * Posts dynamically grouped by year
  * Automatically includes all years present in the posts collection
  */
-export const postsByYear: Record<number, typeof allPosts> = allPosts.reduce((acc, post) => {
-  const year = post.data.collection
-  if (!acc[year]) {
-    acc[year] = []
-  }
-  acc[year].push(post)
-  return acc
-}, {} as Record<number, typeof allPosts>)
+export const postsByYear = allPosts.reduce((acc, post) => {
+  const year = post.data.collection;
+  acc[year] = acc[year] || [];
+  acc[year].push(post);
+  return acc;
+}, {} as Record<number, typeof allPosts>);
 
 /**
  * Get posts by specific year

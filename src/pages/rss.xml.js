@@ -16,22 +16,21 @@ export async function GET(context) {
   const sortedPosts = posts.sort((a, b) => 
     b.data.pubDate.getTime() - a.data.pubDate.getTime()
   )
-  
+  const site = context.site.toString();
+  const baseUrl = site.endsWith('/') ? site : `${site}/`;
+
   return rss({
     title: 'yi - Blog Posts',
     description: 'Latest blog posts and articles',
-    site: context.site.toString().endsWith('/') ? context.site : `${context.site}/`,
+    site: baseUrl,
     items: sortedPosts.map(post => ({
       title: post.data.title,
       pubDate: post.data.pubDate,
       description: post.data.description || '',
-      // Use the correct link format with post.id
       link: `/posts/${post.id}`,
-      // Add additional RSS fields
       author: 'yi',
       categories: post.data.tags || [],
     })),
-    // Add RSS metadata
     customData: `<language>zh-cn</language>`,
   })
 }

@@ -1,25 +1,34 @@
 ---
-const { pathname } = Astro.url
-const pathName = pathname.replace(/\//g, '')
+const { pathname } = Astro.url;
+const basePath = pathname.split("/").filter(Boolean)[0];
 const jumpTags = [
   {
-    tag: 'Projects',
-    path: '/projects/',
-    isActive: pathName === 'projects',
+    tag: "Projects",
+    path: "/projects/",
+    isActive: basePath === "projects",
   },
   {
-    tag: 'Blog',
-    path: '/posts/',
-    isActive: pathName === 'posts',
+    tag: "Blog",
+    path: "/posts/",
+    isActive: basePath === "posts",
   },
-]
+];
 ---
+
 <main class="flex gap-5">
-    {
-        jumpTags.map((tag) => {
-          return (
-            <a href={tag.path} class:list={['text-xl mt-10 italic font-bold animate-delay-150 transition-opacity', { 'opacity-10 hover:opacity-50': !tag.isActive }]}>{tag.tag}</a>
-          )
-        })
-    }
+  {
+    jumpTags.map((tag) => {
+      return (
+        <a
+          href={tag.path}
+          class:list={[
+            "text-xl mt-10 italic font-bold animate-delay-150 transition-opacity",
+            { "opacity-10 hover:opacity-50": !tag.isActive },
+          ]}
+        >
+          {tag.tag}
+        </a>
+      );
+    })
+  }
 </main>

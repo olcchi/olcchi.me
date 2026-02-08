@@ -1,13 +1,11 @@
-interface projectsType {
-  projectName: string
-  description: string
-  repoLink: string
-  previewLink: string
+interface Project {
+  projectName: string;
+  description: string;
+  repoLink: string;
+  previewLink: string;
 }
 
-type Projects<T> = T[]
-
-export const projects: Projects<projectsType> = [
+export const projects: Project[] = [
     {
     projectName: 'Sign',
     description: 'Create & Share Beautiful Signs Quickly',

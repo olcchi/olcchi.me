@@ -15,30 +15,18 @@ import NavBar from "@components/header/Header.astro";
     const navWrapper = document.getElementById("navWrapper");
     if (!navWrapper) return;
 
-    let currentYPostion;
-    let isDown;
-    const dynamicNav = () => {
+    const handleScroll = () => {
+      const isDown = window.scrollY > 30;
       navWrapper.classList.toggle("opacity-0", isDown);
       navWrapper.classList.toggle("opacity-100", !isDown);
     };
 
-    const handleScroll = () => {
-      currentYPostion = window.scrollY;
-      isDown = currentYPostion > 30;
-      dynamicNav();
-    };
-
     window.addEventListener("scroll", handleScroll);
-
-    // Initial check
     handleScroll();
 
-    // Remove listener before next page swap to avoid duplication
     document.addEventListener(
       "astro:before-preparation",
-      () => {
-        window.removeEventListener("scroll", handleScroll);
-      },
+      () => window.removeEventListener("scroll", handleScroll),
       { once: true },
     );
   }
