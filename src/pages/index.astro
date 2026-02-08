@@ -80,14 +80,16 @@ const classList = [
 </Layout>
 
 <script>
-  const sections = document.querySelectorAll("article.mainContainer section");
-  let currentDelay = 50;
+  document.addEventListener("astro:page-load", () => {
+    const sections = document.querySelectorAll("article.mainContainer section");
+    let currentDelay = 50;
 
-  sections.forEach((section, index) => {
-    if (section instanceof HTMLElement) {
-      section.style.animationDelay = `${currentDelay}ms`;
-      currentDelay += (index + 1) * 100;
-    }
+    sections.forEach((section, index) => {
+      if (section instanceof HTMLElement) {
+        section.style.animationDelay = `${currentDelay}ms`;
+        currentDelay += (index + 1) * 100;
+      }
+    });
   });
 </script>
 

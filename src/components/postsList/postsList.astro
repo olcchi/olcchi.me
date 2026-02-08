@@ -14,10 +14,8 @@ const years = Object.keys(postsByYear)
       if (!postsInYear || postsInYear.length === 0) return null;
 
       return (
-        <div class="grid grid-cols-6 border-t borderBase">
-          <p class="col-span-1 text-sm text-gray-4 dark:text-dark-2 italic pt-4 pb-4 mr-20">
-            {year}
-          </p>
+        <div class="grid grid-cols-6">
+          <p class="col-span-1 text-sm italic pt-4 pb-4 mr-20">{year}</p>
           {postsInYear.map((post, index) => {
             return (
               <a
@@ -30,13 +28,14 @@ const years = Object.keys(postsByYear)
                   "items-center",
                   "justify-between",
                   "p-4",
+                  "decoration-none",
                   {
                     "border-t borderBase": index > 0,
                   },
                 ]}
               >
                 <p>{post.data.title}</p>
-                <p class="text-gray-4 dark:text-dark-2">
+                <p>
                   {post.data.pubDate.toLocaleDateString("en-US", {
                     month: "short",
                     day: "numeric",
@@ -53,12 +52,12 @@ const years = Object.keys(postsByYear)
 
 <style>
   #posts {
-    @apply md:transition-colors md:ease-in-out md:duration-300;
+    @apply md:transition-all md:ease-in-out md:duration-300;
   }
   #postsListWrapper:hover #posts {
-    @apply md:dark:text-dark-2 md:text-gray-3;
+    @apply opacity-40;
   }
   #postsListWrapper:hover #posts:hover {
-    @apply md:text-black md:dark:text-white md:transition-colors md:ease-in-out md:duration-100;
+    @apply opacity-100 md:duration-100;
   }
 </style>

@@ -1,28 +1,32 @@
 ---
-import { getRecentPosts } from './_postsCollection'
+import { getRecentPosts } from "./_postsCollection";
 // Get the 3 most recent posts
 const postsListLight = getRecentPosts(3);
 ---
+
 <main>
   <a
-  href="/posts"
-  class="flex items-center gap-2 decoration-none border-none cursor-pointer hover:opacity-30 w-32"
+    href="/posts"
+    class="flex items-center gap-2 decoration-none border-none cursor-pointer hover:opacity-30 w-32"
   >
-  <p id="blockTitle">Posts</p><div class="i-ph-arrow-up-right"></div>
+    <p id="blockTitle">Posts</p><div class="i-ph-arrow-up-right"></div>
   </a>
   <div class="not-prose grid grid-cols-2 gap-5">
     {
       postsListLight.map((posts) => {
         return (
           <>
-          <div class="flex flex-col gap-2">
-              <a href={`/posts/${posts.id}`} class="decoration-none min-w-max font-bold italic w-min border-b  border-gray-3 dark:border-dark-1 hover:border-gray-8 dark:hover:border-gray-3">
+            <div class="flex flex-col gap-2">
+              <a
+                href={`/posts/${posts.id}`}
+                class="linkBase min-w-max font-bold italic w-min border-none"
+              >
                 {posts.data.title}
               </a>
               <p class="text-sm">{posts.data.description}</p>
-              </div>
+            </div>
           </>
-        )
+        );
       })
     }
   </div>

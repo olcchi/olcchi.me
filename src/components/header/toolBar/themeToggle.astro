@@ -50,9 +50,10 @@
     document.documentElement.classList.toggle("dark", isDark);
     updateShikiTheme(currentTheme);
 
-    if (themeToggle) {
-      themeToggle.classList.toggle("i-ph-sun", !isDark);
-      themeToggle.classList.toggle("i-ph-moon", isDark);
+    const toggleEl = document.getElementById("themeToggle");
+    if (toggleEl) {
+      toggleEl.classList.toggle("i-ph-sun", !isDark);
+      toggleEl.classList.toggle("i-ph-moon", isDark);
     }
   };
 
@@ -85,6 +86,17 @@
 
   initTheme();
   themeToggle?.addEventListener("click", toggleTheme);
+
+  // View Transitions support
+  document.addEventListener("astro:after-swap", () => {
+    updateThemeState();
+  });
+
+  document.addEventListener("astro:page-load", () => {
+    const newToggle = document.getElementById("themeToggle");
+    newToggle?.addEventListener("click", toggleTheme);
+    updateThemeState();
+  });
 </script>
 
 <style is:global>

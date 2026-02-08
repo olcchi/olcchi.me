@@ -1,7 +1,8 @@
 ---
+import { ClientRouter } from "astro:transitions";
 import MaskHeader from "@components/header/headerMask.astro";
 // import LetterGlitch from "@components/letterGlitch/glitch";
-import FaultyTerminalBg from "@components/FaultyTerminal/faultyTerminalBg";
+import GradientBg from "@components/gradient/gradientBg";
 import Footer from "@components/footer.astro";
 import BackTo from "@components/backTo.astro";
 import Tab from "@components/tab.astro";
@@ -17,19 +18,23 @@ const { title } = Astro.props;
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="yi's personal website - user interface builder and freelance photographer" />
+    <meta
+      name="description"
+      content="yi's personal website - user interface builder and freelance photographer"
+    />
     <title>{title}</title>
     <link rel="icon" href="/favicon.svg" />
     <script
       defer
       src="https://cloud.umami.is/script.js"
       data-website-id={import.meta.env.UMAMI_WEBSITE_ID}></script>
+    <ClientRouter />
   </head>
   <body id="pageLayout" class="themeBase">
     <MaskHeader />
-    <div class="h-full w-full fixed top-0 left-0 -z-10">
+    <div class="h-full w-full fixed top-0 left-0 -z-10" transition:persist>
       {/* <LetterGlitch client:only="react" /> */}
-      <FaultyTerminalBg client:only="react" />
+      <GradientBg client:only="react" />
     </div>
     <main class="grid grid-cols-[1fr_min(65ch,90%)_1fr] overflow-y-auto">
       <article class="min-h-screen relative col-start-2 col-end-3 p-2">
@@ -38,7 +43,7 @@ const { title } = Astro.props;
             class:list={[
               {
                 hidden: !["posts", "projects"].includes(
-                  Astro.url.pathname.replace(/\//g, "")
+                  Astro.url.pathname.replace(/\//g, ""),
                 ),
               },
             ]}

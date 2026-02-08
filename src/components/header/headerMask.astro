@@ -11,30 +11,37 @@ import NavBar from "@components/header/Header.astro";
   </section>
 </main>
 <script>
-  const navWrapper = document.getElementById("navWrapper")!;
-  let currentYPostion;
-  let isDown;
-  const dynamicNav = () => {
-    navWrapper.classList.toggle("opacity-0", isDown);
-    navWrapper.classList.toggle("opacity-100", !isDown);
-  };
-  window.addEventListener("scroll", () => {
-    currentYPostion = window.scrollY;
-    isDown = currentYPostion > 30;
-    dynamicNav();
-  });
-</script>
-<style>
-  #mask::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 80px;
-    -webkit-mask-image: linear-gradient(black, transparent);
-    mask-image: linear-gradient(to bottom, black, transparent);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+  function initNav() {
+    const navWrapper = document.getElementById("navWrapper");
+    if (!navWrapper) return;
+
+    let currentYPostion;
+    let isDown;
+    const dynamicNav = () => {
+      navWrapper.classList.toggle("opacity-0", isDown);
+      navWrapper.classList.toggle("opacity-100", !isDown);
+    };
+
+    const handleScroll = () => {
+      currentYPostion = window.scrollY;
+      isDown = currentYPostion > 30;
+      dynamicNav();
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    // Initial check
+    handleScroll();
+
+    // Remove listener before next page swap to avoid duplication
+    document.addEventListener(
+      "astro:before-preparation",
+      () => {
+        window.removeEventListener("scroll", handleScroll);
+      },
+      { once: true },
+    );
   }
-</style>
+
+  document.addEventListener("astro:page-load", initNav);
+</script>
