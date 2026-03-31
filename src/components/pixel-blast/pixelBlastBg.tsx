@@ -48,6 +48,8 @@ export default function PixelBlastBg() {
 
     const color = theme === 'dark' ? '#A0A3BF' : '#6B6F9E';
 
+    const maskColor = theme === 'dark' ? '0,0,0' : '255,255,255';
+
     return (
         <div style={{ width: '100vw', height: '100lvh', position: 'fixed', top: 0, left: 0 }}>
             <PixelBlast
@@ -64,6 +66,14 @@ export default function PixelBlastBg() {
                 rippleIntensityScale={1}
                 transparent={true}
                 autoPauseOffscreen={true}
+            />
+            <div
+                style={{
+                    position: 'absolute',
+                    inset: 0,
+                    background: `radial-gradient(ellipse 60% 70% at 50% 50%, rgba(${maskColor}, 0.8) 0%, rgba(${maskColor}, 0.55) 35%, rgba(${maskColor}, 0.2) 65%, transparent 100%)`,
+                    pointerEvents: 'none',
+                }}
             />
         </div>
     );
