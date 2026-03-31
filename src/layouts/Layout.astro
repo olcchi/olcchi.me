@@ -2,7 +2,7 @@
 import { ClientRouter } from "astro:transitions";
 import MaskHeader from "@components/header/headerMask.astro";
 // import LetterGlitch from "@components/letterGlitch/glitch";
-import GradientBg from "@components/gradient/gradientBg";
+import PixelBlastBg from "@components/pixel-blast/pixelBlastBg";
 import Footer from "@components/footer.astro";
 import BackTo from "@components/backTo.astro";
 import Tab from "@components/tab.astro";
@@ -43,7 +43,7 @@ const showNavigation = ["posts", "projects"].includes(
     <MaskHeader />
     <div class="h-full w-full fixed top-0 left-0 -z-10" transition:persist>
       {/* <LetterGlitch client:only="react" /> */}
-      <GradientBg client:only="react" />
+      <PixelBlastBg client:only="react" />
     </div>
     <main class="grid grid-cols-[1fr_min(65ch,90%)_1fr] overflow-y-auto">
       <article class="min-h-screen relative col-start-2 col-end-3 p-2">
