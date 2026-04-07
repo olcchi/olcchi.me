@@ -4,7 +4,6 @@ import {
   presetIcons,
   presetTypography,
   presetUno,
-  presetWebFonts,
 } from 'unocss'
 import transformerDirectives from '@unocss/transformer-directives'
 
@@ -13,15 +12,6 @@ export default defineConfig({
     presetIcons(),
     presetUno(),
     presetAttributify(),
-    presetWebFonts(
-      {
-        provider: 'fontshare',
-        fonts: {
-          sans: 'Satoshi',
-          serif: 'Telma',
-        },
-      },
-    ),
     presetTypography(),
   ],
   shortcuts: [
@@ -36,6 +26,10 @@ export default defineConfig({
     transformerDirectives(),
   ],
   theme: {
+    fontFamily: {
+      sans: 'Pixel',
+      serif: 'Pixel-Serif',
+    },
     animation: {
       keyframes: {
         slideUp: '{ from {transform: translateY(10px);opacity:0;} to {transform: translateY(0px);opacity:100;}}',

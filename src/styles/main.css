@@ -18,3 +18,19 @@
   ::-webkit-selection {
     @apply dark:text-black dark:bg-white bg-black text-white;
   }
+
+@font-face {
+  font-family: 'Pixel';
+  src: url('../assets/GeistPixel-Square.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Pixel-Serif';
+  src: url('../assets/GeistPixel-Square.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
