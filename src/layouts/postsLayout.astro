@@ -15,14 +15,14 @@ const formatDate = (date: Date) => {
   <main>
     <article>
       <section class="pb-5 pt-5">
-        <p class="text-3xl font-bold">
+        <p class="text-3xl font-bold font-sans">
           {title}
         </p>
         <p class="text-sm text-dark-1 dark:text-gray-4">
           {formatDate(pubDate)} · {minutesRead}
         </p>
       </section>
-      <div class="prose">
+      <div class="prose font-sans">
         <slot />
       </div>
     </article>

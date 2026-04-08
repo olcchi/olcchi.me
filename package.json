@@ -31,14 +31,14 @@
     "@evan-yang/eslint-config": "^1.0.9",
     "@iconify-json/mdi": "^1.1.50",
     "@typescript-eslint/parser": "^5.57.1",
-    "@unocss/preset-attributify": "^0.50.6",
-    "@unocss/preset-icons": "^0.50.6",
-    "@unocss/preset-typography": "^0.51.4",
-    "@unocss/preset-web-fonts": "^0.50.8",
-    "@unocss/reset": "^0.51.6",
-    "@unocss/transformer-directives": "^0.51.4",
+    "@unocss/preset-attributify": "^0.51.13",
+    "@unocss/preset-icons": "^0.51.13",
+    "@unocss/preset-typography": "^0.51.13",
+    "@unocss/preset-web-fonts": "^0.51.13",
+    "@unocss/reset": "^0.51.13",
+    "@unocss/transformer-directives": "^0.51.13",
     "eslint": "^8.37.0",
     "eslint-plugin-astro": "^0.26.1",
-    "unocss": "^0.50.6"
+    "unocss": "^0.51.13"
   }
 }
